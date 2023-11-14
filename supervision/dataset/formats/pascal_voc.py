@@ -1,8 +1,7 @@
 import os
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
-from xml.dom.minidom import parseString
-from xml.etree.ElementTree import Element, SubElement, parse, tostring
+from xml.etree.ElementTree import Element, SubElement, tostring
 
 import cv2
 import numpy as np
@@ -11,6 +10,8 @@ from supervision.dataset.utils import approximate_mask_with_polygons
 from supervision.detection.core import Detections
 from supervision.detection.utils import polygon_to_mask, polygon_to_xyxy
 from supervision.utils.file import list_files_with_extensions
+import defusedxml.ElementTree
+import defusedxml.minidom
 
 
 def object_to_pascal_voc(
@@ -129,7 +130,7 @@ def detections_to_pascal_voc(
             annotation.append(next_object)
 
     # Generate XML string
-    xml_string = parseString(tostring(annotation)).toprettyxml(indent="  ")
+    xml_string = defusedxml.minidom.parseString(tostring(annotation)).toprettyxml(indent="  ")
 
     return xml_string
 
@@ -177,7 +178,7 @@ def load_pascal_voc_annotations(
             annotations[image_path] = Detections.empty()
             continue
 
-        tree = parse(annotation_path)
+        tree = defusedxml.ElementTree.parse(annotation_path)
         root = tree.getroot()
 
         resolution_wh = (image.shape[1], image.shape[0])
