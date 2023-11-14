@@ -55,12 +55,12 @@ def validate_input_tensors(predictions: List[np.ndarray], targets: List[np.ndarr
             targets[0], np.ndarray
         ):
             raise ValueError(
-                f"Predictions and targets must be lists of numpy arrays."
+                "Predictions and targets must be lists of numpy arrays."
                 f"Got {type(predictions[0])} and {type(targets[0])} instead."
             )
         if predictions[0].shape[1] != 6:
             raise ValueError(
-                f"Predictions must have shape (N, 6)."
+                "Predictions must have shape (N, 6)."
                 f"Got {predictions[0].shape} instead."
             )
         if targets[0].shape[1] != 5:
